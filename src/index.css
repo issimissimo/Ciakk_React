@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* html, body {
+    background-image: url("images/background.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+} */
+
+
+.gradient-bg {
+    background-color: #0f0e13;
+    background-image: linear-gradient(125deg,
+            hsl(270deg 80% 79%) 0%,
+            hsl(269deg 78% 81%) 11%,
+            hsl(267deg 76% 83%) 21%,
+            hsl(264deg 74% 85%) 31%,
+            hsl(260deg 71% 87%) 40%,
+            hsl(253deg 66% 88%) 51%,
+            hsl(242deg 60% 90%) 61%,
+            hsl(224deg 57% 91%) 72%,
+            hsl(204deg 55% 91%) 85%,
+            hsl(180deg 53% 92%) 100%);
+}
+
+
+/* white glassmorphism */
+.white-glassmorphism {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}

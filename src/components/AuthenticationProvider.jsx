@@ -54,6 +54,7 @@ const AuthenticationProvider = ({ children }) => {
     const Login = async (email, password) => {
         try {
             const res = await signInWithEmailAndPassword(auth, email, password);
+            return res;
         } catch (err) {
             console.error(err);
         }
