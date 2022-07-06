@@ -2,7 +2,7 @@ export const translation = (language) => {
     const tr = {};
     switch (language) {
         case "EN":
-            tr.welcomeTitle = "Welcome";
+            tr.welcomeTitle = "Hello";
             tr.welcomeSubtitle = "You have received this gift from";
             tr.expirationText = "It will be available until";
             tr.showMessageButtonText = "Read the message";

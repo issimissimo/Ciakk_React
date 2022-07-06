@@ -21,6 +21,9 @@ import { firebaseConfig } from "./utils/constants";
 import { firebaseCredentials } from "./utils/constants";
 import { checkBrowser } from "./utils/checkBrowser";
 
+/// Icons
+import { TbMoodSad } from 'react-icons/tb';
+
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -44,16 +47,19 @@ const App = () => {
   const [appState, setAppState] = useState(AppStateEnum.LOADING);
   const { user, loading, error, Login, Logout } = useContext(AuthenticationContext);
 
+  /// Parameters injected by the URL
   const parameters = useRef({
     userId: "e3eyUWxXwySPYvNIO9IKWG8T6U52",
     fileUiid: "f0bbf517-10ed-44b7-8589-52a3bb954598"
   });
 
+  /// Error message
   const errorMsg = useRef({
     message: '',
     icon: ''
   });
 
+  /// Data retrieved from the Database
   const data = useRef(null);
 
 
@@ -68,7 +74,7 @@ const App = () => {
     if (!isChrome && !isSafari && !isFirefox) {
 
       errorMsg.current.message = <>
-        <h1 className="text-2xl font-semibold text-center">Browser not suppported!</h1>
+        <h1 className="text-2xl font-semibold text-center">Your browser is not suppported</h1>
         <p className="mt-5 text-center">Please use <span className="font-semibold">Chrome - Safari - Firefox</span></p>
       </>;
       HandleChangeState(AppStateEnum.ERROR);
@@ -84,7 +90,7 @@ const App = () => {
     // const userId = urlParams.get('id');
     // const fileUiid = urlParams.get('uiid');
 
-    // if (userId == null || fileUiid == null) {
+    // if (!userId || !fileUiid) {
     //   errorMsg.current.message = <>
     //     <h1 className="text-2xl font-semibold text-center">Browser not suppported!</h1>
     //     <p className="mt-5 text-center">Please use <span className="font-semibold">Chrome - Safari - Firefox</span></p>
@@ -114,8 +120,16 @@ const App = () => {
 
 
 
+  const handleClick = (someData) => {
+    console.log(someData);
+  }
+
+
+
   const HandleChangeState = (newState) => {
-    setAppState(newState);
+    setTimeout(() => {
+      setAppState(newState);
+    }, 200);
   }
 
 
@@ -128,6 +142,8 @@ const App = () => {
 
   const GetData = async () => {
 
+    console.log("Reading data...");
+
     /// Check if document exist on firestore
     const docRef = doc(db, parameters.current.userId, parameters.current.fileUiid);
     const docSnap = await getDoc(docRef);
@@ -136,7 +152,6 @@ const App = () => {
 
       /// Get data
       const docData = docSnap.data();
-      console.log(docData)
       data.current = docData;
 
       /// Check if video exist on storage
@@ -164,13 +179,15 @@ const App = () => {
     }
   }
 
+console.log(appState)
+
 
   return (
-    <div className="gradient-bg min-h-screen">
+    <div className="gradient-bg min-h-screen px-10">
       {appState == AppStateEnum.LOADING && <Loader />}
-      {appState == AppStateEnum.ERROR && <Error message={errorMsg.current.message} />}
-      {appState == AppStateEnum.WELCOME && <Welcome data={data.current}/>}
-      {appState == AppStateEnum.MESSAGE && <Message />}
+      {appState == AppStateEnum.Error && <Error />}
+      {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
+      {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
       {appState == AppStateEnum.VIDEO && <Video />}
       {appState == AppStateEnum.GREETINGS && <Greetings />}
     </div>
