@@ -1,6 +1,11 @@
-const Welcome = () => {
+import { translation } from "../utils/translation";
+
+const Welcome = ({ data }) => {
     return (
-        <p>Welcome</p>
+        <div className="min-h-screen flex flex-col justify-center items-center">
+            <p className="text-2xl">{translation(data.language).welcomeTitle}</p>
+            <p className="text-3xl font-bold my-3">{data.receiver}</p>
+        </div>
     )
 }
 

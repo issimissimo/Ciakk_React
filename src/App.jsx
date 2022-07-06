@@ -37,6 +37,9 @@ export const AppStateEnum = {
 }
 
 
+///
+/// App
+///
 const App = () => {
   const [appState, setAppState] = useState(AppStateEnum.LOADING);
   const { user, loading, error, Login, Logout } = useContext(AuthenticationContext);
@@ -49,7 +52,9 @@ const App = () => {
   const errorMsg = useRef({
     message: '',
     icon: ''
-  })
+  });
+
+  const data = useRef(null);
 
 
   /// 1st time
@@ -66,7 +71,7 @@ const App = () => {
         <h1 className="text-2xl font-semibold text-center">Browser not suppported!</h1>
         <p className="mt-5 text-center">Please use <span className="font-semibold">Chrome - Safari - Firefox</span></p>
       </>;
-      setAppState(AppStateEnum.ERROR);
+      HandleChangeState(AppStateEnum.ERROR);
       return;
     }
 
@@ -102,10 +107,16 @@ const App = () => {
   /// On "user" changed (mainly called after Login)
   useEffect(() => {
     if (user) {
-      GetData();
+      if (!data.current) GetData();
+      else HandleChangeState(AppStateEnum.WELCOME);
     }
   }, [user])
 
+
+
+  const HandleChangeState = (newState) => {
+    setAppState(newState);
+  }
 
 
   const LoginToApp = async () => {
@@ -123,53 +134,42 @@ const App = () => {
 
     if (docSnap.exists()) {
 
+      /// Get data
+      const docData = docSnap.data();
+      console.log(docData)
+      data.current = docData;
+
       /// Check if video exist on storage
-      const data = docSnap.data();
-      console.log(data)
-      const storageUrl = data.storageUrl;
+      const storageUrl = docData.storageUrl;
       const storage = getStorage();
       const videoPath = `${parameters.current.userId}/${storageUrl}`;
 
       try {
         await getDownloadURL(ref(storage, videoPath));
-        setAppState(AppStateEnum.WELCOME);
+        HandleChangeState(AppStateEnum.WELCOME);
       }
       catch (error) {
-        console.log("ERROR! Video not found!");
+        console.log("ERROR! Video not found");
         errorMsg.current.message = <h1 className="text-2xl font-semibold text-center">This message has expired</h1>;
-        setAppState(AppStateEnum.ERROR);
+        HandleChangeState(AppStateEnum.ERROR);
       }
 
 
 
 
     } else {
-      console.log("ERROR! Document not found!");
+      console.log("ERROR! Document not found");
       errorMsg.current.message = <h1 className="text-2xl font-semibold text-center">This message has expired</h1>;
-      setAppState(AppStateEnum.ERROR);
+      HandleChangeState(AppStateEnum.ERROR);
     }
   }
-
-
-
-  // if (error) {
-  //   return (
-  //     <OnLoadMessage message={
-  //       <>
-  //         <h1 className="text-2xl font-semibold text-center">Something went wrong loading the page</h1>
-  //         <p className="mt-5 text-center">Please try again later</p>
-  //       </>
-  //     } />
-  //   )
-  // }
-
 
 
   return (
     <div className="gradient-bg min-h-screen">
       {appState == AppStateEnum.LOADING && <Loader />}
       {appState == AppStateEnum.ERROR && <Error message={errorMsg.current.message} />}
-      {appState == AppStateEnum.WELCOME && <Welcome />}
+      {appState == AppStateEnum.WELCOME && <Welcome data={data.current}/>}
       {appState == AppStateEnum.MESSAGE && <Message />}
       {appState == AppStateEnum.VIDEO && <Video />}
       {appState == AppStateEnum.GREETINGS && <Greetings />}
