@@ -1,11 +1,22 @@
+/// React
 import { useState, useEffect, useContext, useRef } from "react";
 
+/// Firebase
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
+/// Components
 import { AuthenticationContext } from "./components/AuthenticationProvider";
+import Loader from "./components/Loader";
+import Error from "./components/Error";
+import Welcome from "./components/Welcome";
+import Message from "./components/Message";
+import Video from "./components/Video";
+import Greetings from "./components/Greetings";
 
+
+/// Utils
 import { firebaseConfig } from "./utils/constants";
 import { firebaseCredentials } from "./utils/constants";
 import { checkBrowser } from "./utils/checkBrowser";
@@ -15,15 +26,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
-const OnLoadMessage = ({ message }) => {
-  return (
-    <div className="gradient-bg min-h-screen flex flex-col justify-center items-center">
-      {message}
-    </div>
-  )
-}
 
-const AppStateEnum = {
+export const AppStateEnum = {
   ERROR: Symbol("error"),
   LOADING: Symbol("loading"),
   WELCOME: Symbol("welcome"),
@@ -32,19 +36,17 @@ const AppStateEnum = {
   GREETINGS: Symbol("greetings")
 }
 
+
 const App = () => {
-
   const [appState, setAppState] = useState(AppStateEnum.LOADING);
-
-  const [initState, setInitState] = useState({ browserCompatible: true, parametersAvailable: true, fileExist: true, loading: true });
   const { user, loading, error, Login, Logout } = useContext(AuthenticationContext);
-  
+
   const parameters = useRef({
-    userId: "",
-    fileUiid: ""
+    userId: "e3eyUWxXwySPYvNIO9IKWG8T6U52",
+    fileUiid: "f0bbf517-10ed-44b7-8589-52a3bb954598"
   });
 
-  const errorMessage = useRef({
+  const errorMsg = useRef({
     message: '',
     icon: ''
   })
@@ -53,27 +55,42 @@ const App = () => {
   /// 1st time
   useEffect(() => {
 
+    ///
     /// Check for browser compatibility
+    ///
     const { isChrome, isSafari, isFirefox } = checkBrowser();
+
     if (!isChrome && !isSafari && !isFirefox) {
-      setInitState((prevState) => ({ ...prevState, browserCompatible: false }));
+
+      errorMsg.current.message = <>
+        <h1 className="text-2xl font-semibold text-center">Browser not suppported!</h1>
+        <p className="mt-5 text-center">Please use <span className="font-semibold">Chrome - Safari - Firefox</span></p>
+      </>;
+      setAppState(AppStateEnum.ERROR);
       return;
     }
 
-    /// Get userId & fileUiid from url parameters
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    parameters.current.userId = urlParams.get('id');
-    parameters.current.fileUiid = urlParams.get('uiid');
 
-    if (parameters.current.userId == null || parameters.current.fileUiid == null) {
-      // setInitErrors((prevState) => ({ ...prevState, parametersAvailable: false }));
-      // return;
+    // ///
+    // /// Get userId & fileUiid from url parameters
+    // ///
+    // const queryString = window.location.search;
+    // const urlParams = new URLSearchParams(queryString);
+    // const userId = urlParams.get('id');
+    // const fileUiid = urlParams.get('uiid');
 
-      /// TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      parameters.current.userId = 'e3eyUWxXwySPYvNIO9IKWG8T6U52';
-      parameters.current.fileUiid = 'f0bbf517-10ed-44b7-8589-52a3bb954598';
-    }
+    // if (userId == null || fileUiid == null) {
+    //   errorMsg.current.message = <>
+    //     <h1 className="text-2xl font-semibold text-center">Browser not suppported!</h1>
+    //     <p className="mt-5 text-center">Please use <span className="font-semibold">Chrome - Safari - Firefox</span></p>
+    //   </>;
+    //   setAppState(AppStateEnum.ERROR);
+    //   return;
+    // }
+
+    // parameters.current.userId = userId;
+    // parameters.current.fileUiid = fileUiid;
+
 
     /// Login
     if (!user) {
@@ -82,7 +99,7 @@ const App = () => {
   }, []);
 
 
-  /// On "user" changed
+  /// On "user" changed (mainly called after Login)
   useEffect(() => {
     if (user) {
       GetData();
@@ -108,16 +125,19 @@ const App = () => {
 
       /// Check if video exist on storage
       const data = docSnap.data();
+      console.log(data)
       const storageUrl = data.storageUrl;
       const storage = getStorage();
       const videoPath = `${parameters.current.userId}/${storageUrl}`;
 
       try {
         await getDownloadURL(ref(storage, videoPath));
-        setInitState((prevState) => ({ ...prevState, loading: false }));
-      } catch (error) {
+        setAppState(AppStateEnum.WELCOME);
+      }
+      catch (error) {
         console.log("ERROR! Video not found!");
-        setInitState((prevState) => ({ ...prevState, fileExist: false }));
+        errorMsg.current.message = <h1 className="text-2xl font-semibold text-center">This message has expired</h1>;
+        setAppState(AppStateEnum.ERROR);
       }
 
 
@@ -125,80 +145,35 @@ const App = () => {
 
     } else {
       console.log("ERROR! Document not found!");
-      setInitState((prevState) => ({ ...prevState, fileExist: false }));
+      errorMsg.current.message = <h1 className="text-2xl font-semibold text-center">This message has expired</h1>;
+      setAppState(AppStateEnum.ERROR);
     }
   }
 
 
 
-  if (!initState.browserCompatible) {
-    return (
-      <OnLoadMessage message={
-        <>
-          <h1 className="text-2xl font-semibold text-center">Browser not suppported!</h1>
-          <p className="mt-5 text-center">Please use <span className="font-semibold">Chrome - Safari - Firefox</span></p>
-        </>
-      } />
-    )
-  }
+  // if (error) {
+  //   return (
+  //     <OnLoadMessage message={
+  //       <>
+  //         <h1 className="text-2xl font-semibold text-center">Something went wrong loading the page</h1>
+  //         <p className="mt-5 text-center">Please try again later</p>
+  //       </>
+  //     } />
+  //   )
+  // }
 
-  if (error) {
-    return (
-      <OnLoadMessage message={
-        <>
-          <h1 className="text-2xl font-semibold text-center">Something went wrong loading the page</h1>
-          <p className="mt-5 text-center">Please try again later</p>
-        </>
-      } />
-    )
-  }
-
-  if (!initState.parametersAvailable) {
-    return (
-      <OnLoadMessage message={
-        <>
-          <h1 className="text-2xl font-semibold text-center">Parameteters not specified</h1>
-        </>
-      } />
-    )
-  }
-
-
-  if (!initState.fileExist) {
-    return (
-      <OnLoadMessage message={
-        <>
-          <h1 className="text-2xl font-semibold text-center">This message has expired</h1>
-        </>
-      } />
-    )
-  }
-
-
-  if (initState.loading || loading) {
-    return (
-      <OnLoadMessage message={
-        <>
-          <h1 className="text-2xl font-semibold text-center">Loading...</h1>
-        </>
-      } />
-    )
-  }
 
 
   return (
     <div className="gradient-bg min-h-screen">
-      {
-        user ? (
-          <>
-            <h1>{user.email}</h1>
-            <button type="button" onClick={Logout}>Logout</button>
-          </>
-        ) : (
-          <h1>No user</h1>
-        )}
+      {appState == AppStateEnum.LOADING && <Loader />}
+      {appState == AppStateEnum.ERROR && <Error message={errorMsg.current.message} />}
+      {appState == AppStateEnum.WELCOME && <Welcome />}
+      {appState == AppStateEnum.MESSAGE && <Message />}
+      {appState == AppStateEnum.VIDEO && <Video />}
+      {appState == AppStateEnum.GREETINGS && <Greetings />}
     </div>
-
   )
 }
 
