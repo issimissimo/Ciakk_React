@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
@@ -23,13 +23,34 @@ const OnLoadMessage = ({ message }) => {
   )
 }
 
+const AppStateEnum = {
+  ERROR: Symbol("error"),
+  LOADING: Symbol("loading"),
+  WELCOME: Symbol("welcome"),
+  MESSAGE: Symbol("message"),
+  VIDEO: Symbol("video"),
+  GREETINGS: Symbol("greetings")
+}
 
 const App = () => {
 
+  const [appState, setAppState] = useState(AppStateEnum.LOADING);
+
   const [initState, setInitState] = useState({ browserCompatible: true, parametersAvailable: true, fileExist: true, loading: true });
   const { user, loading, error, Login, Logout } = useContext(AuthenticationContext);
+  
+  const parameters = useRef({
+    userId: "",
+    fileUiid: ""
+  });
+
+  const errorMessage = useRef({
+    message: '',
+    icon: ''
+  })
 
 
+  /// 1st time
   useEffect(() => {
 
     /// Check for browser compatibility
@@ -42,43 +63,45 @@ const App = () => {
     /// Get userId & fileUiid from url parameters
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    let userId = urlParams.get('id');
-    let fileUiid = urlParams.get('uiid');
+    parameters.current.userId = urlParams.get('id');
+    parameters.current.fileUiid = urlParams.get('uiid');
 
-    if (userId == null || fileUiid == null) {
+    if (parameters.current.userId == null || parameters.current.fileUiid == null) {
       // setInitErrors((prevState) => ({ ...prevState, parametersAvailable: false }));
       // return;
 
       /// TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      userId = 'e3eyUWxXwySPYvNIO9IKWG8T6U52';
-      fileUiid = 'f0bbf517-10ed-44b7-8589-52a3bb954598';
+      parameters.current.userId = 'e3eyUWxXwySPYvNIO9IKWG8T6U52';
+      parameters.current.fileUiid = 'f0bbf517-10ed-44b7-8589-52a3bb954598';
     }
 
-
+    /// Login
     if (!user) {
-      LoginToApp(userId, fileUiid);
-    }
-    else {
-      GetData(userId, fileUiid);
+      LoginToApp();
     }
   }, []);
 
 
+  /// On "user" changed
+  useEffect(() => {
+    if (user) {
+      GetData();
+    }
+  }, [user])
 
-  const LoginToApp = async (userId, fileUiid) => {
+
+
+  const LoginToApp = async () => {
     const { email, password } = firebaseCredentials;
-    const res = await Login(email, password);
-    // console.log(res)
-
-    GetData(userId, fileUiid);
+    await Login(email, password);
   };
 
 
 
-  const GetData = async (userId, fileUiid) => {
+  const GetData = async () => {
 
     /// Check if document exist on firestore
-    const docRef = doc(db, userId, fileUiid);
+    const docRef = doc(db, parameters.current.userId, parameters.current.fileUiid);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
@@ -87,51 +110,19 @@ const App = () => {
       const data = docSnap.data();
       const storageUrl = data.storageUrl;
       const storage = getStorage();
-      const videoPath = `${userId}/${storageUrl}`;
-      getDownloadURL(ref(storage, videoPath))
-        .then((url) => {
+      const videoPath = `${parameters.current.userId}/${storageUrl}`;
 
-          /// Set loading finished
-          setInitState((prevState) => ({ ...prevState, loading: false }));
-        })
-        .catch((error) => {
-          console.log(error)
-          setInitState((prevState) => ({ ...prevState, fileExist: false }));
-        });
+      try {
+        await getDownloadURL(ref(storage, videoPath));
+        setInitState((prevState) => ({ ...prevState, loading: false }));
+      } catch (error) {
+        console.log("ERROR! Video not found!");
+        setInitState((prevState) => ({ ...prevState, fileExist: false }));
+      }
 
 
 
 
-
-
-
-
-
-
-
-
-      // if(checkUrl(downloadUrl)){
-      //   console.log("SIIII")
-      // }
-      // else{
-      //   console.log("NOOO")
-      // }
-
-
-
-
-      // if (data.expiration == null) {
-      //   /// Set the expiration in 7 days
-      //   var futureDate = new Date(addDays(Date(), 7));
-      //   data.expiration = formatDate(futureDate).toString();
-      //   console.log("Setting expiration date to: " + data.expiration);
-      //   updateDoc(docRef, { expiration: data.expiration }).then(() => {
-      //     UI.Setup(data);
-      //   })
-      // }
-      // else {
-      //   UI.Setup(data);
-      // }
     } else {
       console.log("ERROR! Document not found!");
       setInitState((prevState) => ({ ...prevState, fileExist: false }));
