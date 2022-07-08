@@ -24,6 +24,9 @@ import { checkBrowser } from "./utils/checkBrowser";
 /// Icons
 import { TbMoodSad } from 'react-icons/tb';
 
+/// Background
+import Background_bokeh from "./components/providers/backgrounds/Background_bokeh";
+
 
 /// Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -144,7 +147,7 @@ const App = () => {
 
       /// Get data
       const docData = docSnap.data();
-      data.current = docData;
+      
 
       /// Check if video exist on storage
       const storageUrl = docData.storageUrl;
@@ -153,6 +156,11 @@ const App = () => {
 
       try {
         await getDownloadURL(ref(storage, videoPath));
+
+
+
+        /// Proceed to Welcome page
+        data.current = docData;
         HandleChangeState(AppStateEnum.WELCOME);
       }
       catch (error) {
@@ -174,7 +182,8 @@ const App = () => {
 
 
   return (
-    <div className="min-h-screen gradient-bg">
+    <div className="min-h-screen">
+      <Background_bokeh />
       {appState == AppStateEnum.LOADING && <Loader />}
       {appState == AppStateEnum.ERROR && <Error />}
       {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}

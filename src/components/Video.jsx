@@ -11,6 +11,9 @@ import ReactLoading from 'react-loading';
 /// VideoJS Component
 import VideoJS from './providers/videoJs/VideoJS';
 
+/// CSS Anim
+import { Fade } from "react-awesome-reveal";
+
 const Video = ({ data, HandleChangeState }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const playerRef = useRef(null);
@@ -52,15 +55,17 @@ const Video = ({ data, HandleChangeState }) => {
 
 
     return (
-        <div>
+        <>
             {!isLoaded && (
                 <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
                     <ReactLoading type='spin' color='#ffffff' height={50} width={50} />
                 </div>
             )}
 
-            <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
-        </div>
+            <Fade triggerOnce={true}>
+                <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
+            </Fade>
+        </>
     )
 }
 

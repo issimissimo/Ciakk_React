@@ -32,40 +32,6 @@ import "./background_bokeh.scss";
 // `;
 
 const Background_bokeh = () => {
-  // return (
-  //     <Fade>
-  //         <div>
-  //             <div className="background -z-10 fixed">
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //                 <span></span>
-  //             </div>
-
-  //             <div className="min-h-screen flex justify-center items-center text-white">
-  //                 <Reveal keyframes={introAnimation} delay={500}>
-  //                     <p>CIAO</p>
-  //                 </Reveal>
-  //             </div>
-  //         </div>
-  //     </Fade>
-  // )
   return (
     <div className="background -z-10 fixed">
       <span></span>
