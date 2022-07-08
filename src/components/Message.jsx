@@ -1,5 +1,5 @@
 import { translation } from "../utils/translation";
-import { AppStateEnum } from "../App_test";
+import { AppStateEnum } from "../App";
 
 const Message = ({ data, HandleChangeState }) => {
     return (

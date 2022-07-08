@@ -1,7 +1,8 @@
 /// Utils
 import { translation } from "../utils/translation";
 
-import { AppStateEnum } from "../App_test";
+/// AppStateEnum
+import { AppStateEnum } from "../App";
 
 /// CSS Anim
 import Reveal from "react-awesome-reveal";
@@ -73,8 +74,8 @@ const Welcome = ({ data, HandleChangeState }) => {
             <Reveal keyframes={exit ? outroAnimation : introAnimation} delay={500}>
                 <button
                     type="button"
-                    // onClick={() => { HandleChangeState(AppStateEnum.MESSAGE) }}
-                    onClick={() => { setExit(true) }}
+                    onClick={() => { HandleChangeState(AppStateEnum.MESSAGE) }}
+                    // onClick={() => { setExit(true) }}
                     className="border-[1px] p-4 px-7 mt-10 border-black rounded-full">
                     READ MESSAGE
                 </button>

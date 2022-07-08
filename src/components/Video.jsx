@@ -2,46 +2,63 @@
 import React from 'react';
 import { useState, useEffect, useContext, useRef } from "react";
 
+/// AppStateEnum
+import { AppStateEnum } from "../App";
+
+/// Spinner
+import ReactLoading from 'react-loading';
+
+/// VideoJS Component
 import VideoJS from './providers/videoJs/VideoJS';
 
-const Video = () => {
-    const playerRef = React.useRef(null);
+const Video = ({ data, HandleChangeState }) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const playerRef = useRef(null);
 
     const videoJsOptions = {
-        controls: true,
+        autoplay: true,
+        controls: false,
         sources: [{
-            src: "https://firebasestorage.googleapis.com/v0/b/ciakk-de5cd.appspot.com/o/e3eyUWxXwySPYvNIO9IKWG8T6U52%2Fvideo_f0bbf517-10ed-44b7-8589-52a3bb954598.mp4?alt=media&token=285b0f68-c64e-4b9e-bcc1-44b37182f0bf",
+            src: data.downloadUrl,
             type: "video/mp4"
         }]
     }
 
     const handlePlayerReady = (player) => {
 
-        console.log(player)
+        // console.log(player)
 
         playerRef.current = player;
 
         // You can handle player events here, for example:
         player.on('waiting', () => {
-            console.log('player is waiting');
+            // console.log('player is waiting');
         });
 
         player.on('dispose', () => {
-            console.log('player will dispose');
+            // console.log('player will dispose');
         });
 
         player.one("play", () => {
-            console.log("player play")
+            setIsLoaded(true);
+            // console.log("player play")
         })
 
         player.on('ended', () => {
-            console.log("player ended")
+            // console.log("player ended");
+            HandleChangeState(AppStateEnum.GREETINGS);
         });
     };
 
 
     return (
-        <div className="App">
+        <div>
+            {!isLoaded && (
+                <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
+                    <ReactLoading type='spin' color='#ffffff' height={50} width={50} />
+                </div>
+            )}
+
             <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
         </div>
     )

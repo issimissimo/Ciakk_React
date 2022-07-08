@@ -173,20 +173,20 @@ const App = () => {
 
 
 
-  // return (
-  //   <div className="min-h-screen">
-  //     {appState == AppStateEnum.LOADING && <Loader />}
-  //     {appState == AppStateEnum.ERROR && <Error />}
-  //     {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
-  //     {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
-  //     {appState == AppStateEnum.VIDEO && <Video />}
-  //     {appState == AppStateEnum.GREETINGS && <Greetings />}
-  //   </div>
-  // )
-
   return (
-    <Video />
+    <div className="min-h-screen gradient-bg">
+      {appState == AppStateEnum.LOADING && <Loader />}
+      {appState == AppStateEnum.ERROR && <Error />}
+      {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
+      {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
+      {appState == AppStateEnum.VIDEO && <Video data={data.current} HandleChangeState={HandleChangeState} />}
+      {appState == AppStateEnum.GREETINGS && <Greetings />}
+    </div>
   )
+
+  // return (
+  //   <Video />
+  // )
 }
 
 export default App
