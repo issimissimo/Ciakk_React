@@ -25,11 +25,12 @@ import { checkBrowser } from "./utils/checkBrowser";
 import { TbMoodSad } from 'react-icons/tb';
 
 
+/// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
-
+/// AppStateEnum
 export const AppStateEnum = {
   ERROR: Symbol("error"),
   LOADING: Symbol("loading"),
@@ -119,13 +120,6 @@ const App = () => {
   }, [user])
 
 
-
-  const handleClick = (someData) => {
-    console.log(someData);
-  }
-
-
-
   const HandleChangeState = (newState) => {
     setTimeout(() => {
       setAppState(newState);
@@ -141,8 +135,6 @@ const App = () => {
 
 
   const GetData = async () => {
-
-    console.log("Reading data...");
 
     /// Check if document exist on firestore
     const docRef = doc(db, parameters.current.userId, parameters.current.fileUiid);
@@ -179,18 +171,21 @@ const App = () => {
     }
   }
 
-console.log(appState)
 
+
+  // return (
+  //   <div className="min-h-screen">
+  //     {appState == AppStateEnum.LOADING && <Loader />}
+  //     {appState == AppStateEnum.ERROR && <Error />}
+  //     {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
+  //     {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
+  //     {appState == AppStateEnum.VIDEO && <Video />}
+  //     {appState == AppStateEnum.GREETINGS && <Greetings />}
+  //   </div>
+  // )
 
   return (
-    <div className="gradient-bg min-h-screen px-10">
-      {appState == AppStateEnum.LOADING && <Loader />}
-      {appState == AppStateEnum.Error && <Error />}
-      {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
-      {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
-      {appState == AppStateEnum.VIDEO && <Video />}
-      {appState == AppStateEnum.GREETINGS && <Greetings />}
-    </div>
+    <Video />
   )
 }
 

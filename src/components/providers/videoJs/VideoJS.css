@@ -1,0 +1,11 @@
+.video-js{
+    width: 100%;
+    height: 100vh;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  /* to fit the video in the container */
+  .vjs-tech {
+    object-fit: cover;
+  }
