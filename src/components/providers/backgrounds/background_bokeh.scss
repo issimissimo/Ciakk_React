@@ -1,13 +1,14 @@
 
-$particleSize: 80vmin;
+$particleSize: 120vmin;
 $animationDuration: 50s;
-$amount: 20;
+$amount: 30;
 
 
 .background {
     width: 100vw;
     height: 100vh;
-    background: #3E1E68;
+    // background: #3E1E68;
+    background: #1b3488;
   }
 
 .background span {
@@ -20,10 +21,15 @@ $amount: 20;
   animation-duration: $animationDuration;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+  // $colors: (
+  //   #693c87,
+  //   #E45A84,
+  //   #bd6347
+  // );
   $colors: (
-    #583C87,
-    #E45A84,
-    #FFACAC
+    #a11f6b3f,
+    #a11f6b77,
+    #a11f6ba9
   );
   @for $i from 1 through $amount {
     &:nth-child(#{$i}) {

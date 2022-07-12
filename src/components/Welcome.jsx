@@ -66,12 +66,14 @@ const Welcome = ({ data, HandleChangeState }) => {
 
     return (
         <div className="min-h-screen flex flex-col justify-center items-center">
-            <Reveal keyframes={exit ? outroAnimation : introAnimation} delay={200}>
-                <p className="text-2xl">{translation(data.language).welcomeTitle}</p>
-                <p className="text-3xl font-bold my-3">{data.receiver}</p>
+            <Reveal keyframes={exit ? outroAnimation : introAnimation} delay={0}>
+                <p className="text-2xl font-serif">{translation(data.language).welcomeTitle}</p>
+            </Reveal>
+            <Reveal keyframes={exit ? outroAnimation : introAnimation} delay={500}>
+                <p className="text-5xl font-bebas my-3">{data.receiver}</p>
             </Reveal>
 
-            <Reveal keyframes={exit ? outroAnimation : introAnimation} delay={500}>
+            {/* <Reveal keyframes={exit ? outroAnimation : introAnimation} delay={500}>
                 <button
                     type="button"
                     onClick={() => { HandleChangeState(AppStateEnum.MESSAGE) }}
@@ -79,7 +81,7 @@ const Welcome = ({ data, HandleChangeState }) => {
                     className="border-[1px] p-4 px-7 mt-10 border-black rounded-full">
                     READ MESSAGE
                 </button>
-            </Reveal>
+            </Reveal> */}
         </div>
     )
 

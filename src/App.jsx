@@ -147,15 +147,34 @@ const App = () => {
 
       /// Get data
       const docData = docSnap.data();
-      
+
+      // console.log(docData)
+
 
       /// Check if video exist on storage
-      const storageUrl = docData.storageUrl;
+      const videoStorage = docData.storageUrl;
       const storage = getStorage();
-      const videoPath = `${parameters.current.userId}/${storageUrl}`;
+      const videoPath = `${parameters.current.userId}/${videoStorage}`;
 
       try {
-        await getDownloadURL(ref(storage, videoPath));
+        const videoDownloadUrl = await getDownloadURL(ref(storage, videoPath));
+        docData.videoDownloadUrl = videoDownloadUrl;
+
+
+        /// Get profile picture URL
+        console.log(docData.profile)
+        const profileStorage = docData.profile;
+        const storage1 = getStorage();
+        const profilePath = `${parameters.current.userId}/${profileStorage}`;
+        console.log(profilePath)
+
+
+        const profileDownloadUrl = await getDownloadURL(ref(storage1, profilePath));
+        console.log(profileDownloadUrl)
+        docData.profileDownloadUrl = profileDownloadUrl;
+
+
+
 
 
 
@@ -182,7 +201,7 @@ const App = () => {
 
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen text-white">
       <Background_bokeh />
       {appState == AppStateEnum.LOADING && <Loader />}
       {appState == AppStateEnum.ERROR && <Error />}
@@ -194,7 +213,10 @@ const App = () => {
   )
 
   // return (
-  //   <Video />
+  //   <div className="min-h-screen text-white">
+  //     <Background_bokeh />
+  //     <Message data={data.current} HandleChangeState={HandleChangeState} />
+  //   </div>
   // )
 }
 
