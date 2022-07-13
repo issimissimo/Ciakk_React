@@ -27,6 +27,8 @@ import { TbMoodSad } from 'react-icons/tb';
 /// Background
 import Background_bokeh from "./components/providers/backgrounds/Background_bokeh";
 
+import image from "./images/background.jpg"
+
 
 /// Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -200,24 +202,24 @@ const App = () => {
 
 
 
-  return (
-    <div className="min-h-screen text-white">
-      <Background_bokeh />
-      {appState == AppStateEnum.LOADING && <Loader />}
-      {appState == AppStateEnum.ERROR && <Error />}
-      {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
-      {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
-      {appState == AppStateEnum.VIDEO && <Video data={data.current} HandleChangeState={HandleChangeState} />}
-      {appState == AppStateEnum.GREETINGS && <Greetings />}
-    </div>
-  )
-
   // return (
-  //   <div className="min-h-screen text-white">
-  //     <Background_bokeh />
-  //     <Message data={data.current} HandleChangeState={HandleChangeState} />
+  //   <div className="min-h-screen text-white gradient-bg">
+  //     {/* <Background_bokeh /> */}
+  //     {appState == AppStateEnum.LOADING && <Loader />}
+  //     {appState == AppStateEnum.ERROR && <Error />}
+  //     {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
+  //     {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
+  //     {appState == AppStateEnum.VIDEO && <Video data={data.current} HandleChangeState={HandleChangeState} />}
+  //     {appState == AppStateEnum.GREETINGS && <Greetings />}
   //   </div>
   // )
+
+  return (
+    <div className="min-h-screen text-white">
+      {/* <Message data={data.current} HandleChangeState={HandleChangeState} /> */}
+      <Loader />
+    </div>
+  )
 }
 
 export default App

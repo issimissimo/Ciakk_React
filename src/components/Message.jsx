@@ -11,7 +11,7 @@ const Message = ({ data, HandleChangeState }) => {
 
     return (
         <div className="min-h-screen flex flex-col justify-center items-center p-7">
-            <img className="rounded-full border-2" src={data.profileDownloadUrl}></img>
+            {/* <img className="rounded-full border-2" src={data.profileDownloadUrl}></img>
             <div className="white-glassmorphism px-5">
                 <p className="text-1xl my-3 text-center">{data.message}</p>
             </div>
@@ -21,7 +21,7 @@ const Message = ({ data, HandleChangeState }) => {
                 onClick={() => { HandleChangeState(AppStateEnum.VIDEO) }}
                 className="border-[1px] p-4 px-7 mt-10 border-black rounded-full">
                 {translation(data.language).playVideoButtonText}
-            </button>
+            </button> */}
         </div>
     )
 }

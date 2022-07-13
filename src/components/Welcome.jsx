@@ -6,74 +6,64 @@ import { AppStateEnum } from "../App";
 
 /// CSS Anim
 import Reveal from "react-awesome-reveal";
-import { keyframes } from "@emotion/react";
-
-
-const introAnimation = keyframes`
-  from {
-    opacity: 0;
-    transform: translate3d(0px, 50px, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-`;
-
-const outroAnimation = keyframes`
-  from {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translate3d(0px, -50px, 0);
-  }
-`;
-
-
+import { fadeInUp, fadeOutUp, lineFadeInLeft, lineFadeInRight, lineFadeOutLeft, lineFadeOutRight } from "../utils/revealCustomAnimations";
 
 /// React
 import { useState, useEffect, useContext, useRef } from "react";
 
+
+
+
+///
+/// WELCOME
+///
 const Welcome = ({ data, HandleChangeState }) => {
 
-    const [exit, setExit] = useState(false);
+  const [enter, setEnter] = useState(true);
+  const lineTopRef = useRef();
+  const lineBottomRef = useRef();
 
-    // return (
-    //     <CSSTransition in={inProp} timeout={2000} classNames="my-node">
-    //         <div className="min-h-screen flex flex-col justify-center items-center">
-    //             <p className="text-2xl">{translation(data.language).welcomeTitle}</p>
-    //             <p className="text-3xl font-bold my-3">{data.receiver}</p>
+  const duration = 5000;
 
+  useEffect(() => {
 
-    //             <button
-    //                 type="button"
-    //                 // onClick={() => { HandleChangeState(AppStateEnum.MESSAGE) }}
-    //                 onClick={() => setInProp(true)}
-    //                 className="border-[1px] p-4 px-7 mt-10 border-black rounded-full">
-    //                 READ MESSAGE
-    //             </button>
+    setTimeout(() => {
+      GoNext();
+    }, duration);
+  }, []);
 
 
+  const GoNext = () => {
+    // setEnter(false);
+  }
 
 
-    //         </div>
-    //     </CSSTransition>
-    // )
+  return (
+    <div className="min-h-screen flex flex-col justify-center items-center">
 
-    return (
-        <div className="min-h-screen flex flex-col justify-center items-center">
-            <Reveal keyframes={exit ? outroAnimation : introAnimation} delay={0}>
-                <p className="text-2xl font-serif">{translation(data.language).welcomeTitle}</p>
-            </Reveal>
-            <Reveal keyframes={exit ? outroAnimation : introAnimation} delay={500}>
-                <p className="text-5xl font-bebas my-3">{data.receiver}</p>
-            </Reveal>
 
-            {/* <Reveal keyframes={exit ? outroAnimation : introAnimation} delay={500}>
+      <Reveal keyframes={enter ? fadeInUp : fadeOutUp} delay={enter ? 0 : 200}>
+        <p className="text-2xl font-serif my-4">{translation(data.language).welcomeTitle}</p>
+      </Reveal>
+
+      <div className="my-2">
+
+        <Reveal keyframes={enter ? lineFadeInLeft : lineFadeOutLeft} delay={enter ? 1000 : 0}>
+          <div ref={lineTopRef} className="bg-white h-1 relative" />
+        </Reveal>
+
+        <Reveal keyframes={enter ? fadeInUp : fadeOutUp} delay={enter ? 500 : 300}>
+          <p className="text-5xl font-bebas p-0 my-2">{data.receiver}</p>
+        </Reveal>
+
+        <Reveal keyframes={enter ? lineFadeInRight : lineFadeOutRight} delay={enter ? 1000 : 0}>
+          <div ref={lineBottomRef} className="bg-white h-1 relative -mt-2" />
+        </Reveal>
+
+      </div>
+
+
+      {/* <Reveal keyframes={exit ? outroAnimation : introAnimation} delay={500}>
                 <button
                     type="button"
                     onClick={() => { HandleChangeState(AppStateEnum.MESSAGE) }}
@@ -82,11 +72,8 @@ const Welcome = ({ data, HandleChangeState }) => {
                     READ MESSAGE
                 </button>
             </Reveal> */}
-        </div>
-    )
-
-
-
+    </div>
+  )
 }
 
 export default Welcome;
