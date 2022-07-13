@@ -29,6 +29,8 @@ import Background_bokeh from "./components/providers/backgrounds/Background_boke
 
 import image from "./images/background.jpg"
 
+import screenfull from 'screenfull';
+
 
 /// Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -52,6 +54,19 @@ export const AppStateEnum = {
 const App = () => {
   const [appState, setAppState] = useState(AppStateEnum.LOADING);
   const { user, loading, error, Login, Logout } = useContext(AuthenticationContext);
+
+  const goFull = () => {
+
+    console.log("FULL")
+
+    const element = document.getElementById('root');
+
+    if (screenfull.isEnabled) {
+      screenfull.request(element, { navigationUI: 'hide' });
+    } else {
+      // Ignore or do something else
+    }
+  }
 
   /// Parameters injected by the URL
   const parameters = useRef({
@@ -120,7 +135,7 @@ const App = () => {
   useEffect(() => {
     if (user) {
       if (!data.current) GetData();
-      else HandleChangeState(AppStateEnum.WELCOME);
+      else HandleChangeState(AppStateEnum.MESSAGE);
     }
   }, [user])
 
@@ -176,13 +191,13 @@ const App = () => {
         docData.profileDownloadUrl = profileDownloadUrl;
 
 
-
+        console.log("PROCEDO....")
 
 
 
         /// Proceed to Welcome page
         data.current = docData;
-        HandleChangeState(AppStateEnum.WELCOME);
+        HandleChangeState(AppStateEnum.MESSAGE);
       }
       catch (error) {
         console.log("ERROR! Video not found");
@@ -202,24 +217,23 @@ const App = () => {
 
 
 
+  return (
+    <>
+      {appState == AppStateEnum.LOADING && <Loader />}
+      {appState == AppStateEnum.ERROR && <Error />}
+      {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
+      {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
+      {appState == AppStateEnum.VIDEO && <Video data={data.current} HandleChangeState={HandleChangeState} />}
+      {appState == AppStateEnum.GREETINGS && <Greetings />}
+    </>
+  )
+
   // return (
-  //   <div className="min-h-screen text-white gradient-bg">
-  //     {/* <Background_bokeh /> */}
-  //     {appState == AppStateEnum.LOADING && <Loader />}
-  //     {appState == AppStateEnum.ERROR && <Error />}
-  //     {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
-  //     {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
-  //     {appState == AppStateEnum.VIDEO && <Video data={data.current} HandleChangeState={HandleChangeState} />}
-  //     {appState == AppStateEnum.GREETINGS && <Greetings />}
+  //   <div className="min-h-screen text-white">
+  //     <Message data={data.current} HandleChangeState={HandleChangeState} />
+  //     {/* <Loader /> */}
   //   </div>
   // )
-
-  return (
-    <div className="min-h-screen text-white">
-      {/* <Message data={data.current} HandleChangeState={HandleChangeState} /> */}
-      <Loader />
-    </div>
-  )
 }
 
 export default App
