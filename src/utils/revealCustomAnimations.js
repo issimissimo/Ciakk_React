@@ -75,3 +75,14 @@ export const lineFadeOutRight = keyframes`
     transform: translate3d(-150px, 0px, 0);
   }
 `;
+
+
+export const fadeIn = keyframes`
+  from { opacity: 0;}
+  to { opacity: 1;}
+`;
+
+export const fadeOut = keyframes`
+  from { opacity: 1;}
+  to { opacity: 0;}
+`;

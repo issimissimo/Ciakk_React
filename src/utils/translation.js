@@ -6,7 +6,7 @@ export const translation = (language) => {
             tr.welcomeSubtitle = "You have received this gift from";
             tr.expirationText = "It will be available until";
             tr.showMessageButtonText = "Read the message";
-            tr.playVideoButtonText = "Watch my video ";
+            tr.playVideoButtonText = "Play video";
             tr.messageSubtile = "created a video for you!";
             tr.tanksTitleText = "Thank You";
             tr.tanksSubtitleText = "We hope you enjoined this gift.\nWe'll be glad to see you in our shop";
@@ -18,7 +18,7 @@ export const translation = (language) => {
             tr.welcomeSubtitle = "Vous avez reçu ce cadeau de";
             tr.expirationText = "Il sera disponible jusqu'au";
             tr.showMessageButtonText = "Lire le message";
-            tr.playVideoButtonText = "Lire ma vidéo";
+            tr.playVideoButtonText = "Lire la vidéo";
             tr.messageSubtile = "a fait une vidéo pour vous";
             tr.tanksTitleText = "Merci";
             tr.tanksSubtitleText = "Nous espérons que vous avez accepté ce cadeau.\nNous serons heureux de vous voir dans notre boutique";

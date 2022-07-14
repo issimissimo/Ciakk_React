@@ -20,16 +20,7 @@ import Greetings from "./components/Greetings";
 import { firebaseConfig } from "./utils/constants";
 import { firebaseCredentials } from "./utils/constants";
 import { checkBrowser } from "./utils/checkBrowser";
-
-/// Icons
-import { TbMoodSad } from 'react-icons/tb';
-
-/// Background
-import Background_bokeh from "./components/providers/backgrounds/Background_bokeh";
-
-import image from "./images/background.jpg"
-
-import screenfull from 'screenfull';
+import easyImgPreloader from 'easy-img-preloader';
 
 
 /// Initialize Firebase
@@ -48,6 +39,18 @@ export const AppStateEnum = {
 }
 
 
+
+const PreloadImage = src => new Promise(function (resolve, reject) {
+  const img = new Image();
+  img.onload = function () {
+    resolve(img);
+  }
+  img.onerror = reject;
+  img.src = src;
+});
+
+
+
 ///
 /// App
 ///
@@ -55,18 +58,6 @@ const App = () => {
   const [appState, setAppState] = useState(AppStateEnum.LOADING);
   const { user, loading, error, Login, Logout } = useContext(AuthenticationContext);
 
-  const goFull = () => {
-
-    console.log("FULL")
-
-    const element = document.getElementById('root');
-
-    if (screenfull.isEnabled) {
-      screenfull.request(element, { navigationUI: 'hide' });
-    } else {
-      // Ignore or do something else
-    }
-  }
 
   /// Parameters injected by the URL
   const parameters = useRef({
@@ -193,11 +184,39 @@ const App = () => {
 
         console.log("PROCEDO....")
 
+        // easyImgPreloader([
+        //   profileDownloadUrl // preload remote image
+        // ], (progress) => {
+
+        //   console.log(progress)
+        //   progress === 1 && console.log('All images have been loaded');
+
+        //   if (progress === 1) {
+
+        //     /// Proceed to Welcome page
+        //     data.current = docData;
+        //     HandleChangeState(AppStateEnum.MESSAGE);
+        //   }
 
 
-        /// Proceed to Welcome page
-        data.current = docData;
-        HandleChangeState(AppStateEnum.MESSAGE);
+
+        // }, 3000);
+
+        PreloadImage(profileDownloadUrl)
+          .then(img => { 
+            
+            /// Proceed to Welcome page
+            data.current = docData;
+            HandleChangeState(AppStateEnum.MESSAGE);
+
+          })
+          .catch(err => console.error("Failed", err))
+
+
+
+        // /// Proceed to Welcome page
+        // data.current = docData;
+        // HandleChangeState(AppStateEnum.MESSAGE);
       }
       catch (error) {
         console.log("ERROR! Video not found");

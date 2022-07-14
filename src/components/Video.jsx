@@ -12,10 +12,14 @@ import ReactLoading from 'react-loading';
 import VideoJS from './providers/videoJs/VideoJS';
 
 /// CSS Anim
-import { Fade } from "react-awesome-reveal";
+import Reveal from "react-awesome-reveal";
+import { fadeIn, fadeOut } from "../utils/revealCustomAnimations";
+
+
 
 const Video = ({ data, HandleChangeState }) => {
     const [isLoaded, setIsLoaded] = useState(false);
+    const [enter, setEnter] = useState(true);
     const playerRef = useRef(null);
 
     const videoJsOptions = {
@@ -27,9 +31,16 @@ const Video = ({ data, HandleChangeState }) => {
         }]
     }
 
-    const handlePlayerReady = (player) => {
+    const OnVideoEnded = () => {
+        setEnter(false);
 
-        // console.log(player)
+        setTimeout(() => {
+            HandleChangeState(AppStateEnum.GREETINGS);
+        }, 1000)
+    }
+
+
+    const handlePlayerReady = (player) => {
 
         playerRef.current = player;
 
@@ -49,7 +60,7 @@ const Video = ({ data, HandleChangeState }) => {
 
         player.on('ended', () => {
             // console.log("player ended");
-            HandleChangeState(AppStateEnum.GREETINGS);
+            OnVideoEnded();
         });
     };
 
@@ -62,9 +73,9 @@ const Video = ({ data, HandleChangeState }) => {
                 </div>
             )}
 
-            <Fade triggerOnce={true}>
+            <Reveal keyframes={enter ? fadeIn : fadeOut}>
                 <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
-            </Fade>
+            </Reveal>
         </>
     )
 }
