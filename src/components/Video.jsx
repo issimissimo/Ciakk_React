@@ -31,7 +31,7 @@ const Video = ({ data, HandleChangeState }) => {
         }]
     }
 
-    const OnVideoEnded = () => {
+    const onVideoEnded = () => {
         setEnter(false);
 
         setTimeout(() => {
@@ -60,7 +60,7 @@ const Video = ({ data, HandleChangeState }) => {
 
         player.on('ended', () => {
             // console.log("player ended");
-            OnVideoEnded();
+            onVideoEnded();
         });
     };
 

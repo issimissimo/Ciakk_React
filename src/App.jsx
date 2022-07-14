@@ -126,7 +126,7 @@ const App = () => {
   useEffect(() => {
     if (user) {
       if (!data.current) GetData();
-      else HandleChangeState(AppStateEnum.MESSAGE);
+      else HandleChangeState(AppStateEnum.GREETINGS);
     }
   }, [user])
 
@@ -207,7 +207,7 @@ const App = () => {
             
             /// Proceed to Welcome page
             data.current = docData;
-            HandleChangeState(AppStateEnum.MESSAGE);
+            HandleChangeState(AppStateEnum.GREETINGS);
 
           })
           .catch(err => console.error("Failed", err))
@@ -243,7 +243,7 @@ const App = () => {
       {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
       {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
       {appState == AppStateEnum.VIDEO && <Video data={data.current} HandleChangeState={HandleChangeState} />}
-      {appState == AppStateEnum.GREETINGS && <Greetings />}
+      {appState == AppStateEnum.GREETINGS && <Greetings data={data.current} />}
     </>
   )
 

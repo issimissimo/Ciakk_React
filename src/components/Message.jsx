@@ -1,9 +1,19 @@
-import { translation } from "../utils/translation";
-import { AppStateEnum } from "../App";
+/// React
 import { useState } from "react";
 
+/// Utils
+import { translation } from "../utils/translation";
+
+/// Enums
+import { AppStateEnum } from "../App"
+
+/// Extensions
+import Button from "./extensions/Button";
+
+/// Images
 import imageSeparator from "../images/separator.png";
 
+/// Icons
 import { BsPlayCircle } from "react-icons/bs";
 
 /// CSS Anim
@@ -13,19 +23,9 @@ import { fadeInUp, fadeOutUp, fadeIn, fadeOut } from "../utils/revealCustomAnima
 import easyImgPreloader from 'easy-img-preloader';
 
 
-const Button = ({ text, Icon, onClick }) => {
-    return (
-        <div
-            className="flex items-center justify-evenly border-[1px] p-4 px-7 w-52 border-white rounded-full text-white gradient-bttn" style={{ height: "70px" }}
-            onClick={onClick}
-        >
-            <Icon fontSize={26} />
-            <p>{text}</p>
-        </div>
-    )
-}
-
-
+///
+/// MESSAGE
+///
 const Message = ({ data, HandleChangeState }) => {
     const [enter, setEnter] = useState(true);
 
@@ -57,6 +57,7 @@ const Message = ({ data, HandleChangeState }) => {
                 <Reveal keyframes={enter ? fadeIn : fadeOut} delay={enter ? 800 : 200}>
                     <Button
                         text={translation(data.language).playVideoButtonText}
+                        active={true}
                         Icon={BsPlayCircle}
                         onClick={HandleClick}
                     />
