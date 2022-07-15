@@ -10,8 +10,9 @@ export const translation = (language) => {
             tr.messageSubtile = "created a video for you!";
             tr.tanksTitleText = "Thank You";
             tr.tanksSubtitleText = "We hope you enjoined this gift.\nWe'll be glad to see you in our shop";
-            tr.replayButtonText = "Replay video";
-            tr.homeButtonText = "Return to home";
+            tr.greetings1 = "This video message was recorded at ";
+            tr.greetings2 = " and will be available until ";
+            tr.greetings3 = "You can download the video with the button below";
             tr.downloadText = "Download";
             tr.downloadingText = "Downloading";
             break;
@@ -24,8 +25,9 @@ export const translation = (language) => {
             tr.messageSubtile = "a fait une vidéo pour vous";
             tr.tanksTitleText = "Merci";
             tr.tanksSubtitleText = "Nous espérons que vous avez accepté ce cadeau.\nNous serons heureux de vous voir dans notre boutique";
-            tr.replayButtonText = "Rejouer la vidéo";
-            tr.homeButtonText = "Retourner à la maison";
+            tr.greetings1 = "Ce message vidéo a été enregistré chez ";
+            tr.greetings2 = " et sera disponible jusqu'à ";
+            tr.greetings3 = "Vous pouvez télécharger la vidéo avec le bouton ci-dessous";
             tr.downloadText = "Télécharger";
             tr.downloadingText = "Téléchargement";
             break;

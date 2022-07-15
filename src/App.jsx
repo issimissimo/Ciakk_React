@@ -82,11 +82,10 @@ const App = () => {
     /// Check for browser compatibility
     ///
     const { isChrome, isSafari, isFirefox } = checkBrowser();
-
     if (!isChrome && !isSafari && !isFirefox) {
-
-      errorMsg.current.message = <>
-        <h1 className="text-2xl font-semibold text-center">Your browser is not suppported</h1>
+      errorMsg.current.message = 
+      <>
+        <h1 className="text-1xl font-semibold text-center">This browser is not suppported</h1>
         <p className="mt-5 text-center">Please use <span className="font-semibold">Chrome - Safari - Firefox</span></p>
       </>;
       HandleChangeState(AppStateEnum.ERROR);
@@ -126,7 +125,7 @@ const App = () => {
   useEffect(() => {
     if (user) {
       if (!data.current) GetData();
-      else HandleChangeState(AppStateEnum.GREETINGS);
+      else HandleChangeState(AppStateEnum.MESSAGE);
     }
   }, [user])
 
@@ -156,9 +155,6 @@ const App = () => {
       /// Get data
       const docData = docSnap.data();
 
-      // console.log(docData)
-
-
       /// Check if video exist on storage
       const videoStorage = docData.storageUrl;
       const storage = getStorage();
@@ -170,15 +166,12 @@ const App = () => {
 
 
         /// Get profile picture URL
-        console.log(docData.profile)
         const profileStorage = docData.profile;
         const storage1 = getStorage();
         const profilePath = `${parameters.current.userId}/${profileStorage}`;
-        console.log(profilePath)
 
 
         const profileDownloadUrl = await getDownloadURL(ref(storage1, profilePath));
-        console.log(profileDownloadUrl)
         docData.profileDownloadUrl = profileDownloadUrl;
 
 
@@ -203,11 +196,11 @@ const App = () => {
         // }, 3000);
 
         PreloadImage(profileDownloadUrl)
-          .then(img => { 
-            
+          .then(img => {
+
             /// Proceed to Welcome page
             data.current = docData;
-            HandleChangeState(AppStateEnum.GREETINGS);
+            HandleChangeState(AppStateEnum.MESSAGE);
 
           })
           .catch(err => console.error("Failed", err))
@@ -219,8 +212,8 @@ const App = () => {
         // HandleChangeState(AppStateEnum.MESSAGE);
       }
       catch (error) {
-        console.log("ERROR! Video not found");
-        errorMsg.current.message = <h1 className="text-2xl font-semibold text-center">This message has expired</h1>;
+        console.log("ERROR! Video not found or Quota exceeded");
+        errorMsg.current.message = <h1 className="text-sm font-semibold text-center">This video is expired<br></br> or quota is exceeded</h1>;
         HandleChangeState(AppStateEnum.ERROR);
       }
 
@@ -229,7 +222,7 @@ const App = () => {
 
     } else {
       console.log("ERROR! Document not found");
-      errorMsg.current.message = <h1 className="text-2xl font-semibold text-center">This message has expired</h1>;
+      errorMsg.current.message = <h1 className="text-2xl font-semibold text-center">This message is expired</h1>;
       HandleChangeState(AppStateEnum.ERROR);
     }
   }
@@ -239,7 +232,7 @@ const App = () => {
   return (
     <>
       {appState == AppStateEnum.LOADING && <Loader />}
-      {appState == AppStateEnum.ERROR && <Error />}
+      {appState == AppStateEnum.ERROR && <Error message={errorMsg.current.message}/>}
       {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
       {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
       {appState == AppStateEnum.VIDEO && <Video data={data.current} HandleChangeState={HandleChangeState} />}
@@ -253,6 +246,14 @@ const App = () => {
   //     {/* <Loader /> */}
   //   </div>
   // )
+
+  // return (
+  //   <div className="min-h-screen flex flex-col justify-center items-center">
+  //     <p className='text-white text-xs'>CIAO</p>
+  //   </div>
+  // )
+
+
 }
 
 export default App
