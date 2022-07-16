@@ -1,4 +1,4 @@
-export const checkBrowser = () => {
+const checkBrowser = () => {
 
     const response = {};
 
@@ -38,3 +38,5 @@ export const checkBrowser = () => {
 
     return response;
 }
+
+export default checkBrowser;

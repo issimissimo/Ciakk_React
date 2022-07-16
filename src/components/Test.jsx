@@ -2,56 +2,42 @@
 import React from 'react';
 import { useState, useEffect, useContext, useRef } from "react";
 
-/// AppStateEnum
-import { AppStateEnum } from "../App";
-
 /// Spinner
 import ReactLoading from 'react-loading';
 
 /// VideoJS Component
 import VideoJS from './providers/videoJs/VideoJS';
 
-/// CSS Anim
-import Reveal from "react-awesome-reveal";
-import { fadeIn, fadeOut } from "../utils/revealCustomAnimations";
 
 
 
-const Video = ({ data, iOS, onGoNext }) => {
+
+
+const Test = ({ data, HandleChangeState }) => {
+
+    console.log(data)
     const [isLoaded, setIsLoaded] = useState(false);
-    const [isMuted, setIsMuted] = useState();
     const [enter, setEnter] = useState(true);
-
     const playerRef = useRef(null);
-
-    useEffect(() => {
-        setIsMuted(iOS);
-    }, [])
-
-    console.log(iOS)
-    console.log(data.downloadUrl)
 
     const videoJsOptions = {
         autoplay: true,
         controls: false,
-        muted: iOS ? true : false,
+        muted: true,
         sources: [{
+            // src: "https://firebasestorage.googleapis.com/v0/b/ciakk-de5cd.appspot.com/o/fwQvvT92JjaN7B0sBGSNWyVY8oy1%2Fvideo_3f501359-9c51-46e2-8d5a-39f1b74e6ac6.mp4?alt=media&token=1444dbad-2681-44dd-a355-e4857018df9f",
             src: data.downloadUrl,
             type: "video/mp4"
         }]
     }
 
+
     const onVideoEnded = () => {
         setEnter(false);
 
         setTimeout(() => {
-            onGoNext();
+            // HandleChangeState(AppStateEnum.GREETINGS);
         }, 1000)
-    }
-
-    const toggleMuted = (value) => {
-        if (playerRef.current)
-            playerRef.current.muted(value);
     }
 
 
@@ -80,31 +66,20 @@ const Video = ({ data, iOS, onGoNext }) => {
     };
 
 
+
     return (
         <>
-            {!isLoaded && (
+            {/* {!isLoaded && (
                 <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
                     <ReactLoading type='spin' color='#ffffff' height={50} width={50} />
                 </div>
-            )}
+            )} */}
 
-            {isMuted && (
-                <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
-                    <p>IS MUTED!</p>
-                </div>
-            )}
-
-            {isLoaded && (
-                <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
-                    <button className='text-white' onClick={() => { toggleMuted(true) }}>AUDIO</button>
-                </div>
-            )}
-
-            <Reveal keyframes={enter ? fadeIn : fadeOut}>
+            <div className='min-h-screen min-w-full'>
                 <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
-            </Reveal>
+            </div>
         </>
     )
 }
 
-export default Video;
+export default Test;

@@ -4,9 +4,6 @@ import { useState } from "react";
 /// Utils
 import { translation } from "../utils/translation";
 
-/// Enums
-import { AppStateEnum } from "../App"
-
 /// Extensions
 import Button from "./extensions/Button";
 
@@ -20,20 +17,18 @@ import { BsPlayCircle } from "react-icons/bs";
 import Reveal from "react-awesome-reveal";
 import { fadeInUp, fadeOutUp, fadeIn, fadeOut } from "../utils/revealCustomAnimations";
 
-import easyImgPreloader from 'easy-img-preloader';
-
 
 ///
 /// MESSAGE
 ///
-const Message = ({ data, HandleChangeState }) => {
+const Message = ({ data, onGoNext }) => {
     const [enter, setEnter] = useState(true);
 
     const HandleClick = () => {
         setEnter(false);
 
         setTimeout(() => {
-            HandleChangeState(AppStateEnum.VIDEO)
+            onGoNext();
         }, 1000)
     }
 

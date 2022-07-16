@@ -10,6 +10,7 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { AuthenticationContext } from "./components/AuthenticationProvider";
 import Loader from "./components/Loader";
 import Error from "./components/Error";
+import Welcome from "./components/Welcome";
 import Message from "./components/Message";
 import Video from "./components/Video";
 import Greetings from "./components/Greetings";
@@ -21,8 +22,6 @@ import Test from "./components/Test"
 import { firebaseConfig } from "./utils/constants";
 import { firebaseCredentials } from "./utils/constants";
 import checkBrowser from "./utils/checkBrowser";
-import checkIOS from "./utils/checkIOS";
-import checkMobile from "./utils/checkMobile";
 
 
 /// Initialize Firebase
@@ -60,8 +59,6 @@ const App = () => {
   const [appState, setAppState] = useState(AppStateEnum.LOADING);
   const { user, loading, error, Login, Logout } = useContext(AuthenticationContext);
 
-  /// Is iOS device?
-  const iOS = useRef();
 
   /// Parameters injected by the URL
   const parameters = useRef({
@@ -82,12 +79,11 @@ const App = () => {
   /// 1st time
   useEffect(() => {
 
-
+    ///
     /// Check for browser compatibility
+    ///
     const { isChrome, isSafari, isFirefox } = checkBrowser();
     if (!isChrome && !isSafari && !isFirefox) {
-
-      /// We can't proceed because the browser is not compatible
       errorMsg.current.message =
         <>
           <h1 className="text-1xl font-semibold text-center">This browser is not suppported</h1>
@@ -96,31 +92,6 @@ const App = () => {
       HandleChangeState(AppStateEnum.ERROR);
       return;
     }
-
-    /// Check if we are running on iOS device
-    iOS.current = checkIOS();
-
-
-    // ///
-    // /// Get userId & fileUiid from url parameters
-    // ///
-    // const queryString = window.location.search;
-    // const urlParams = new URLSearchParams(queryString);
-    // const userId = urlParams.get('id');
-    // const fileUiid = urlParams.get('uiid');
-
-    // if (!userId || !fileUiid) {
-    //   errorMsg.current.message = <>
-    //     <h1 className="text-2xl font-semibold text-center">Browser not suppported!</h1>
-    //     <p className="mt-5 text-center">Please use <span className="font-semibold">Chrome - Safari - Firefox</span></p>
-    //   </>;
-    //   setAppState(AppStateEnum.ERROR);
-    //   return;
-    // }
-
-    // parameters.current.userId = userId;
-    // parameters.current.fileUiid = fileUiid;
-
 
     /// Login
     if (!user) {
@@ -149,6 +120,10 @@ const App = () => {
     const { email, password } = firebaseCredentials;
     await Login(email, password);
   };
+
+  useEffect(() => {
+    console.log(appState)
+  }, [appState])
 
 
 
@@ -209,15 +184,58 @@ const App = () => {
 
 
 
+
+  // if (appState === AppStateEnum.LOADING) {
+  //   console.log(1)
+  //   return (
+  //     <Loader />
+  //   )
+  // }
+  // if (appState === AppStateEnum.MESSAGE) {
+  //   console.log(2)
+  //   return (
+  //     <Message data={data.current} HandleChangeState={HandleChangeState} onClick={() => { setAppState(AppStateEnum.VIDEO) }} />
+  //   )
+  // }
+  // if (appState === AppStateEnum.VIDEO) {
+  //   console.log(3)
+  //   return (
+  //     <Test data={data.current} HandleChangeState={HandleChangeState} />
+  //   )
+  // }
+  // else {
+  //   return (
+  //     <Test data={data.current} HandleChangeState={HandleChangeState} />
+  //   )
+  // }
+
+
+  // return (
+  //   <>
+  //     {appState == AppStateEnum.LOADING && <Loader />}
+  //     {appState == AppStateEnum.ERROR && <Error message={errorMsg.current.message}/>}
+  //     {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
+  //     {appState == AppStateEnum.MESSAGE && <Message data={data.current} HandleChangeState={HandleChangeState} />}
+  //     {appState == AppStateEnum.VIDEO && <Video data={data.current} HandleChangeState={HandleChangeState} />}
+  //     {appState == AppStateEnum.GREETINGS && <Greetings data={data.current} />}
+  //   </>
+  // )
+
   return (
     <>
+      {/* <button onClick={() => { setAppState(AppStateEnum.VIDEO) }}>CLICK</button> */}
       {appState == AppStateEnum.LOADING && <Loader />}
       {appState == AppStateEnum.ERROR && <Error message={errorMsg.current.message} />}
+      {appState == AppStateEnum.WELCOME && <Welcome data={data.current} HandleChangeState={HandleChangeState} />}
       {appState == AppStateEnum.MESSAGE && <Message data={data.current} onGoNext={() => { setAppState(AppStateEnum.VIDEO) }} />}
-      {appState == AppStateEnum.VIDEO && <Video data={data.current} iOS={iOS.current} onGoNext={() => { setAppState(AppStateEnum.GREETINGS) }} />}
+      {appState == AppStateEnum.VIDEO && <Video data={data.current} HandleChangeState={HandleChangeState} />}
       {appState == AppStateEnum.GREETINGS && <Greetings data={data.current} />}
     </>
   )
+
+  // return (
+  //   <Test data={data.current} HandleChangeState={HandleChangeState} />
+  // )
 }
 
 export default App

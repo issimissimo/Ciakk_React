@@ -6,8 +6,11 @@ const Button = ({ text, Icon, active, loading, onClick }) => {
             className={`flex items-center justify-evenly border-[1px] p-4 px-7 w-52 h-[70px] rounded-full ${active ? "gradient-bttn" : "gradient-bttn-disabled"}`}
             onClick={onClick}
         >
-            {loading ? <ReactLoading type='spin' color='#ffffff' height={26} width={26} /> : <Icon fontSize={26} />}
-            {text !== "undefined" && <p>{text}</p>}
+            {Icon !== undefined && (
+                loading ? <ReactLoading type='spin' color='#ffffff' height={26} width={26} /> : <Icon fontSize={26} />
+            )
+            }
+            {text !== undefined && <p>{text}</p>}
 
         </div>
     )
