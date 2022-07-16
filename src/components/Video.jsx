@@ -1,9 +1,6 @@
 /// React
 import React from 'react';
-import { useState, useEffect, useContext, useRef } from "react";
-
-/// AppStateEnum
-import { AppStateEnum } from "../App";
+import { useState, useEffect, useRef } from "react";
 
 /// Spinner
 import ReactLoading from 'react-loading';
@@ -15,6 +12,47 @@ import VideoJS from './providers/videoJs/VideoJS';
 import Reveal from "react-awesome-reveal";
 import { fadeIn, fadeOut } from "../utils/revealCustomAnimations";
 
+/// Icons
+import { IoVolumeMuteOutline, IoVolumeMedium } from 'react-icons/io5';
+
+
+export const ToggleAudioButton = ({ audioEnabled, onButtonClicked }) => {
+    const [isOn, setIsOn] = useState();
+
+    useEffect(() => {
+        setIsOn(audioEnabled);
+    }, []);
+
+    const HandleClick = () => {
+        setIsOn(!isOn);
+        onButtonClicked();
+    }
+
+    return (
+        <Reveal keyframes={!isOn ? fadeIn : fadeOut} delay={!isOn ? 0 : 1000}>
+            <div
+                className="flex items-center justify-evenly border-[1px] p-4 px-7 w-52 h-[70px] rounded-full text-black text-sm font-semibold bg-white"
+                onClick={HandleClick}
+            >
+                {isOn ?
+                    (
+                        <>
+                            <IoVolumeMedium fontSize={28} />
+                            <p>Audio enabled</p>
+                        </>
+                    ) :
+                    (
+                        <>
+                            <IoVolumeMuteOutline fontSize={28} />
+                            <p>Turn on audio</p>
+                        </>
+                    )
+                }
+            </div>
+        </Reveal>
+    )
+}
+
 
 
 const Video = ({ data, iOS, onGoNext }) => {
@@ -23,13 +61,6 @@ const Video = ({ data, iOS, onGoNext }) => {
     const [enter, setEnter] = useState(true);
 
     const playerRef = useRef(null);
-
-    useEffect(() => {
-        setIsMuted(iOS);
-    }, [])
-
-    console.log(iOS)
-    console.log(data.downloadUrl)
 
     const videoJsOptions = {
         autoplay: true,
@@ -80,25 +111,34 @@ const Video = ({ data, iOS, onGoNext }) => {
     };
 
 
+    useEffect(() => {
+        setIsMuted(iOS);
+    }, [])
+
+
     return (
         <>
-            {!isLoaded && (
+            {!isLoaded ? (
                 <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
                     <ReactLoading type='spin' color='#ffffff' height={50} width={50} />
                 </div>
-            )}
+            ) :
+                (
+                    isMuted && (
+                        <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
+                            <ToggleAudioButton
+                                onButtonClicked={() => {
+                                    toggleMuted(false);
+                                    setTimeout(() => {
+                                        setIsMuted(false);
+                                    }, 2000);
+                                }} />
+                        </div>
+                    )
+                )
+            }
 
-            {isMuted && (
-                <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
-                    <p>IS MUTED!</p>
-                </div>
-            )}
 
-            {isLoaded && (
-                <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
-                    <button className='text-white' onClick={() => { toggleMuted(true) }}>AUDIO</button>
-                </div>
-            )}
 
             <Reveal keyframes={enter ? fadeIn : fadeOut}>
                 <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
