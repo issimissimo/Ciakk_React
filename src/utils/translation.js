@@ -15,6 +15,8 @@ export const translation = (language) => {
             tr.greetings3 = "You can download the video with the button below";
             tr.downloadText = "Download";
             tr.downloadingText = "Downloading";
+            tr.enableAudio = "Turn on audio";
+            tr.audioEnabled = "Audio enabled";
             break;
         case "FR":
             tr.welcomeTitle = "Salut";
@@ -30,6 +32,8 @@ export const translation = (language) => {
             tr.greetings3 = "Vous pouvez télécharger la vidéo avec le bouton ci-dessous";
             tr.downloadText = "Télécharger";
             tr.downloadingText = "Téléchargement";
+            tr.enableAudio = "Activer le son";
+            tr.audioEnabled = "Audio activé";
             break;
     };
     return tr;

@@ -8,6 +8,9 @@ import ReactLoading from 'react-loading';
 /// VideoJS Component
 import VideoJS from './providers/videoJs/VideoJS';
 
+/// Utils
+import { translation } from "../utils/translation";
+
 /// CSS Anim
 import Reveal from "react-awesome-reveal";
 import { fadeIn, fadeOut } from "../utils/revealCustomAnimations";
@@ -16,12 +19,8 @@ import { fadeIn, fadeOut } from "../utils/revealCustomAnimations";
 import { IoVolumeMuteOutline, IoVolumeMedium } from 'react-icons/io5';
 
 
-export const ToggleAudioButton = ({ audioEnabled, onButtonClicked }) => {
-    const [isOn, setIsOn] = useState();
-
-    useEffect(() => {
-        setIsOn(audioEnabled);
-    }, []);
+export const ToggleAudioButton = ({ data, onButtonClicked }) => {
+    const [isOn, setIsOn] = useState(false);
 
     const HandleClick = () => {
         setIsOn(!isOn);
@@ -38,13 +37,13 @@ export const ToggleAudioButton = ({ audioEnabled, onButtonClicked }) => {
                     (
                         <>
                             <IoVolumeMedium fontSize={28} />
-                            <p>Audio enabled</p>
+                            <p>{translation(data.language).audioEnabled}</p>
                         </>
                     ) :
                     (
                         <>
                             <IoVolumeMuteOutline fontSize={28} />
-                            <p>Turn on audio</p>
+                            <p>{translation(data.language).enableAudio}</p>
                         </>
                     )
                 }
@@ -127,6 +126,7 @@ const Video = ({ data, iOS, onGoNext }) => {
                     isMuted && (
                         <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
                             <ToggleAudioButton
+                                data={data}
                                 onButtonClicked={() => {
                                     toggleMuted(false);
                                     setTimeout(() => {
@@ -141,7 +141,9 @@ const Video = ({ data, iOS, onGoNext }) => {
 
 
             <Reveal keyframes={enter ? fadeIn : fadeOut}>
-                <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
+                <div className='min-h-screen min-w-full'>
+                    <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
+                </div>
             </Reveal>
         </>
     )

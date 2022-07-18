@@ -5,6 +5,7 @@ import { useState, useEffect, useContext, useRef } from "react";
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 /// Components
 import { AuthenticationContext } from "./components/AuthenticationProvider";
@@ -14,8 +15,6 @@ import Message from "./components/Message";
 import Video from "./components/Video";
 import Greetings from "./components/Greetings";
 
-import {ToggleAudioButton} from "./components/Video";
-
 
 /// Utils
 import { firebaseConfig } from "./utils/constants";
@@ -23,11 +22,13 @@ import { firebaseCredentials } from "./utils/constants";
 import checkBrowser from "./utils/checkBrowser";
 import checkIOS from "./utils/checkIOS";
 import checkMobile from "./utils/checkMobile";
+import { addDays, padTo2Digits, formatDate } from "./utils/dateUtils";
 
 
 /// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const functions = getFunctions();
 
 
 /// AppStateEnum
@@ -67,6 +68,8 @@ const App = () => {
   const parameters = useRef({
     userId: "e3eyUWxXwySPYvNIO9IKWG8T6U52",
     fileUiid: "f0bbf517-10ed-44b7-8589-52a3bb954598"
+    // userId: "",
+    // fileUiid: ""
   });
 
   /// Error message
@@ -111,8 +114,7 @@ const App = () => {
 
     // if (!userId || !fileUiid) {
     //   errorMsg.current.message = <>
-    //     <h1 className="text-2xl font-semibold text-center">Browser not suppported!</h1>
-    //     <p className="mt-5 text-center">Please use <span className="font-semibold">Chrome - Safari - Firefox</span></p>
+    //     <h1 className="font-semibold text-center">Parameters not specified</h1>
     //   </>;
     //   setAppState(AppStateEnum.ERROR);
     //   return;
@@ -151,7 +153,6 @@ const App = () => {
   };
 
 
-
   const GetData = async () => {
 
     /// Check if document exist on firestore
@@ -170,7 +171,6 @@ const App = () => {
 
       try {
         const videoDownloadUrl = await getDownloadURL(ref(storage, videoPath));
-        console.log(videoDownloadUrl)
         docData.videoDownloadUrl = videoDownloadUrl;
 
 
@@ -178,10 +178,19 @@ const App = () => {
         const profileStorage = docData.profile;
         const storage1 = getStorage();
         const profilePath = `${parameters.current.userId}/${profileStorage}`;
-
-
         const profileDownloadUrl = await getDownloadURL(ref(storage1, profilePath));
         docData.profileDownloadUrl = profileDownloadUrl;
+
+
+        /// Set expiration date in 7 days
+        if (docData.expiration == null) {
+          docData.expiration = formatDate(new Date(addDays(Date(), 7)));
+          updateDoc(docRef, { expiration: docData.expiration });
+
+          /// Schedule storage delete
+          const storage_scheduleDelete = httpsCallable(functions, 'storage_scheduleDelete');
+          storage_scheduleDelete({ videoPath: videoPath, profilePath: profilePath, timeOutInSeconds: 604800 }); /// 604800 seconds = 7 days
+        }
 
 
         PreloadImage(profileDownloadUrl)

@@ -37,7 +37,7 @@ const Greetings = ({ data }) => {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center p-7">
+        <div className="min-h-screen flex flex-col items-center p-7 px-12">
 
             <Reveal keyframes={fadeInUp}>
                 <div className="flex flex-col items-center text-white mt-10">

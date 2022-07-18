@@ -37,7 +37,7 @@ const Message = ({ data, onGoNext }) => {
 
             <div className="flex flex-col items-center ">
                 <Reveal keyframes={enter ? fadeInUp : fadeOutUp} delay={enter ? 200 : 0}>
-                    <img className="rounded-full border-[1px] w-36" src={data.profileDownloadUrl}></img>
+                    <img className="rounded-full border-[1px] w-28" src={data.profileDownloadUrl}></img>
                 </Reveal>
                 <Reveal keyframes={enter ? fadeInUp : fadeOutUp} delay={enter ? 400 : 0}>
                     <div className="white-glassmorphism mt-5 flex flex-col items-center">
