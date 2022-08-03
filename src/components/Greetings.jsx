@@ -39,8 +39,40 @@ const Greetings = ({ data }) => {
     return (
         <div className="min-h-screen flex flex-col items-center p-7 px-12">
 
-            <Reveal keyframes={fadeInUp}>
-                <div className="flex flex-col items-center text-white mt-10">
+
+            <div className="flex flex-1 flex-col items-center justify-center text-white">
+                <Reveal keyframes={fadeIn}>
+                    <img className="mb-4" src={separator01} />
+                    <p className="text-2xl font-semibold">{data.owner}</p>
+                    <p className="font-light">{data.ownerInfo}</p>
+                    <img className="mt-4" src={separator01a} />
+                </Reveal>
+            </div>
+
+
+
+            <div className="flex flex-1 flex-col items-center justify-center">
+                <Reveal keyframes={fadeIn} delay={600}>
+                    <p className="text-white text-center text-sm">{translation(data.language).greetings1}"{data.owner}"{translation(data.language).greetings2}{data.expiration}</p>
+                    <p className="text-white text-center text-sm my-5">{translation(data.language).greetings3}</p>
+                </Reveal>
+            </div>
+
+
+            <div className="flex flex-1 flex-col items-center">
+                <Reveal keyframes={fadeIn} delay={1200}>
+                    <Button
+                        text={isDownloading ? translation(data.language).downloadingText : translation(data.language).downloadText}
+                        active={isDownloading ? false : true}
+                        Icon={HiDownload}
+                        onClick={handleDownload}
+                        loading={isDownloading}
+                    />
+                </Reveal>
+            </div>
+
+            {/* <Reveal keyframes={fadeInUp}>
+                <div className="flex h-1/3 flex-col items-center justify-center text-white mt-10  bg-slate-600">
                     <img className="mb-4" src={separator01} />
                     <p className="text-2xl font-semibold">{data.owner}</p>
                     <p className="font-light">{data.ownerInfo}</p>
@@ -48,7 +80,7 @@ const Greetings = ({ data }) => {
                 </div>
             </Reveal>
 
-            <div className="flex flex-1 flex-col items-center justify-center">
+            <div className="flex h-1/3 flex-col items-center justify-center bg-red-400">
                 <Reveal keyframes={fadeIn} delay={300}>
                     <p className="text-white text-center text-sm">{translation(data.language).greetings1}"{data.owner}"{translation(data.language).greetings2}{data.expiration}</p>
                 </Reveal>
@@ -64,7 +96,7 @@ const Greetings = ({ data }) => {
                         loading={isDownloading}
                     />
                 </Reveal>
-            </div>
+            </div> */}
         </div>
     )
 }

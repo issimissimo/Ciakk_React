@@ -3,7 +3,7 @@ import ReactLoading from 'react-loading';
 const Button = ({ text, Icon, active, loading, onClick }) => {
     return (
         <div
-            className={`flex items-center justify-evenly border-[1px] p-4 px-7 w-52 h-[70px] rounded-full ${active ? "gradient-bttn" : "gradient-bttn-disabled"}`}
+            className={`flex items-center justify-evenly border-[1px] p-4 px-7 w-48 h-[70px] rounded-full ${active ? "gradient-bttn" : "gradient-bttn-disabled"}`}
             onClick={onClick}
         >
             {Icon !== undefined && (

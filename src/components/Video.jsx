@@ -19,6 +19,9 @@ import { fadeIn, fadeOut } from "../utils/revealCustomAnimations";
 import { IoVolumeMuteOutline, IoVolumeMedium } from 'react-icons/io5';
 
 
+///
+/// audio button
+///
 export const ToggleAudioButton = ({ data, onButtonClicked }) => {
     const [isOn, setIsOn] = useState(false);
 
@@ -54,7 +57,12 @@ export const ToggleAudioButton = ({ data, onButtonClicked }) => {
 
 
 
+
+///
+/// Video
+///
 const Video = ({ data, iOS, onGoNext }) => {
+
     const [isLoaded, setIsLoaded] = useState(false);
     const [isMuted, setIsMuted] = useState();
     const [enter, setEnter] = useState(true);
@@ -66,7 +74,7 @@ const Video = ({ data, iOS, onGoNext }) => {
         controls: false,
         muted: iOS ? true : false,
         sources: [{
-            src: data.downloadUrl,
+            src: data.videoDownloadUrl,
             type: "video/mp4"
         }]
     }
@@ -115,16 +123,17 @@ const Video = ({ data, iOS, onGoNext }) => {
     }, [])
 
 
+
     return (
         <>
             {!isLoaded ? (
-                <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
+                <div className="z-10 fixed top-0 bottom-0 left-0 right-0 flex flex-col justify-center items-center">
                     <ReactLoading type='spin' color='#ffffff' height={50} width={50} />
                 </div>
             ) :
                 (
                     isMuted && (
-                        <div className="min-h-screen min-w-full z-10 fixed flex flex-col justify-center items-center">
+                        <div className="flex-1 min-w-full z-10 fixed flex flex-col justify-center items-center">
                             <ToggleAudioButton
                                 data={data}
                                 onButtonClicked={() => {
@@ -138,12 +147,8 @@ const Video = ({ data, iOS, onGoNext }) => {
                 )
             }
 
-
-
-            <Reveal keyframes={enter ? fadeIn : fadeOut}>
-                <div className='min-h-screen min-w-full'>
-                    <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
-                </div>
+            <Reveal className='flex-1 flex flex-col' keyframes={enter ? fadeIn : fadeOut} >
+                <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
             </Reveal>
         </>
     )

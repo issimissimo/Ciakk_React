@@ -66,8 +66,8 @@ const App = () => {
 
   /// Parameters injected by the URL
   const parameters = useRef({
-    userId: "e3eyUWxXwySPYvNIO9IKWG8T6U52",
-    fileUiid: "f0bbf517-10ed-44b7-8589-52a3bb954598"
+    userId: "BncWSqiODhO6DWKDqAEQ5zR4ZuU2",
+    fileUiid: "c36f92a8-8104-45c1-913b-cd1e8aef1a3a"
     // userId: "",
     // fileUiid: ""
   });
@@ -165,8 +165,9 @@ const App = () => {
       const docData = docSnap.data();
 
       /// Check if video exist on storage
-      const videoStorage = docData.storageUrl;
+      const videoStorage = docData.storageVideoRef;
       const storage = getStorage();
+
       const videoPath = `${parameters.current.userId}/${videoStorage}`;
 
       try {
@@ -175,7 +176,7 @@ const App = () => {
 
 
         /// Get profile picture URL
-        const profileStorage = docData.profile;
+        const profileStorage = docData.storagePictRef;
         const storage1 = getStorage();
         const profilePath = `${parameters.current.userId}/${profileStorage}`;
         const profileDownloadUrl = await getDownloadURL(ref(storage1, profilePath));

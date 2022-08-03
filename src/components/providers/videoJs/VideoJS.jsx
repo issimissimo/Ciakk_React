@@ -32,9 +32,9 @@ export const VideoJS = ({ options, onReady }) => {
 
 
     return (
-        <div data-vjs-player>
-            <video ref={videoRef} playsInline className='video-js vjs-tech vjs-big-play-centered' />
-        </div>
+        // <div data-vjs-player>
+            <video ref={videoRef} playsInline className='video-js vjs-tech' />
+        // </div>
     );
 }
 
