@@ -11,6 +11,7 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 import { AuthenticationContext } from "./components/AuthenticationProvider";
 import Loader from "./components/Loader";
 import Error from "./components/Error";
+import Welcome from "./components/Welcome";
 import Message from "./components/Message";
 import Video from "./components/Video";
 import Greetings from "./components/Greetings";
@@ -66,8 +67,8 @@ const App = () => {
 
   /// Parameters injected by the URL
   const parameters = useRef({
-    userId: "BncWSqiODhO6DWKDqAEQ5zR4ZuU2",
-    fileUiid: "c36f92a8-8104-45c1-913b-cd1e8aef1a3a"
+    userId: "fwQvvT92JjaN7B0sBGSNWyVY8oy1",
+    fileUiid: "9da4bfb1-80f1-44d0-8063-30302e37aa54"
     // userId: "",
     // fileUiid: ""
   });
@@ -135,7 +136,7 @@ const App = () => {
   useEffect(() => {
     if (user) {
       if (!data.current) GetData();
-      else HandleChangeState(AppStateEnum.MESSAGE);
+      else HandleChangeState(AppStateEnum.WELCOME);
     }
   }, [user])
 
@@ -199,7 +200,7 @@ const App = () => {
 
             /// Proceed to Welcome page
             data.current = docData;
-            HandleChangeState(AppStateEnum.MESSAGE);
+            HandleChangeState(AppStateEnum.WELCOME);
 
           })
           .catch(err => console.error("Failed", err))
@@ -223,6 +224,7 @@ const App = () => {
     <>
       {appState == AppStateEnum.LOADING && <Loader />}
       {appState == AppStateEnum.ERROR && <Error message={errorMsg.current.message} />}
+      {appState == AppStateEnum.WELCOME && <Welcome data={data.current} onGoNext={() => { setAppState(AppStateEnum.MESSAGE) }} />}
       {appState == AppStateEnum.MESSAGE && <Message data={data.current} onGoNext={() => { setAppState(AppStateEnum.VIDEO) }} />}
       {appState == AppStateEnum.VIDEO && <Video data={data.current} iOS={iOS.current} onGoNext={() => { setAppState(AppStateEnum.GREETINGS) }} />}
       {appState == AppStateEnum.GREETINGS && <Greetings data={data.current} />}

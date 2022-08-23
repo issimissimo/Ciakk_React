@@ -1,78 +1,87 @@
 /// Utils
 import { translation } from "../utils/translation";
 
-/// AppStateEnum
-import { AppStateEnum } from "../App";
-
 /// CSS Anim
 import Reveal from "react-awesome-reveal";
-import { fadeInUp, fadeOutUp, lineFadeInLeft, lineFadeInRight, lineFadeOutLeft, lineFadeOutRight } from "../utils/revealCustomAnimations";
+import { fadeIn, fadeOut } from "../utils/revealCustomAnimations";
+
+/// SCSS
+import "../flowers.scss";
 
 /// React
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect } from "react";
 
+
+
+function lerp(value1, value2, amount) {
+  amount = amount < 0 ? 0 : amount;
+  amount = amount > 1 ? 1 : amount;
+  return value1 + (value2 - value1) * amount;
+};
 
 
 
 ///
 /// WELCOME
 ///
-const Welcome = ({ data, HandleChangeState }) => {
+const Welcome = ({ data, onGoNext }) => {
 
   const [enter, setEnter] = useState(true);
-  const lineTopRef = useRef();
-  const lineBottomRef = useRef();
-
-  const duration = 5000;
+  const [titleVisible, setTitleVisible] = useState(false);
+  const duration = 6000;
 
   useEffect(() => {
+    setFlowersVisibility(0, 1, 1.5, () => {
+      setTitleVisible(true);
+    });
 
     setTimeout(() => {
-      GoNext();
+      setEnter(false);
+      setFlowersVisibility(1, 0, 1, () => {
+        onGoNext();
+      });
     }, duration);
   }, []);
 
 
-  const GoNext = () => {
-    // setEnter(false);
+  const setFlowersVisibility = (start, end, duration, callback) => {
+    let value = 0;
+
+    function setVisibility(start, end, duration, callback) {
+      let _alpha = lerp(start, end, value);
+      let _percentage = 100 - (_alpha * 100);
+      document.documentElement.style.setProperty('--percentage', _percentage + '%');
+      document.documentElement.style.setProperty('--alpha', _alpha);
+      setTimeout(() => {
+        if (value < 1) {
+          value += 0.01;
+          setVisibility(start, end, duration, callback);
+        }
+        else {
+          if (callback !== undefined) callback();
+        }
+      }, duration * 10)
+    }
+    setVisibility(start, end, duration, callback);
   }
 
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center">
+    <>
+      <div className="flowers"></div>
 
+      {titleVisible &&
+        <div className="flex-1 flex flex-col justify-center items-center z-10">
+          <Reveal keyframes={enter ? fadeIn : fadeOut} delay={enter ? 0 : 0}>
+            <p className="text-4xl font-script-1 text-white opacity-70 p-0">{translation(data.language).welcomeTitle}</p>
+          </Reveal>
 
-      <Reveal keyframes={enter ? fadeInUp : fadeOutUp} delay={enter ? 0 : 200}>
-        <p className="text-2xl font-serif my-4">{translation(data.language).welcomeTitle}</p>
-      </Reveal>
-
-      <div className="my-2">
-
-        <Reveal keyframes={enter ? lineFadeInLeft : lineFadeOutLeft} delay={enter ? 1000 : 0}>
-          <div ref={lineTopRef} className="bg-white h-1 relative" />
-        </Reveal>
-
-        <Reveal keyframes={enter ? fadeInUp : fadeOutUp} delay={enter ? 500 : 300}>
-          <p className="text-5xl font-bebas p-0 my-2">{data.receiver}</p>
-        </Reveal>
-
-        <Reveal keyframes={enter ? lineFadeInRight : lineFadeOutRight} delay={enter ? 1000 : 0}>
-          <div ref={lineBottomRef} className="bg-white h-1 relative -mt-2" />
-        </Reveal>
-
-      </div>
-
-
-      {/* <Reveal keyframes={exit ? outroAnimation : introAnimation} delay={500}>
-                <button
-                    type="button"
-                    onClick={() => { HandleChangeState(AppStateEnum.MESSAGE) }}
-                    // onClick={() => { setExit(true) }}
-                    className="border-[1px] p-4 px-7 mt-10 border-black rounded-full">
-                    READ MESSAGE
-                </button>
-            </Reveal> */}
-    </div>
+          <Reveal keyframes={enter ? fadeIn : fadeOut} delay={enter ? 0 : 0}>
+            <p className="text-5xl font-script-1 text-white p-0 mt-3">{data.receiver}</p>
+          </Reveal>
+        </div>
+      }
+    </>
   )
 }
 

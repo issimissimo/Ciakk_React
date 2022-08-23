@@ -15,7 +15,7 @@ import separator01a from "../images/separator_01a.png";
 
 /// CSS Anim
 import Reveal from "react-awesome-reveal";
-import { fadeInUp, fadeOutUp, fadeIn, fadeOut } from "../utils/revealCustomAnimations";
+import { fadeIn } from "../utils/revealCustomAnimations";
 
 
 
@@ -70,33 +70,6 @@ const Greetings = ({ data }) => {
                     />
                 </Reveal>
             </div>
-
-            {/* <Reveal keyframes={fadeInUp}>
-                <div className="flex h-1/3 flex-col items-center justify-center text-white mt-10  bg-slate-600">
-                    <img className="mb-4" src={separator01} />
-                    <p className="text-2xl font-semibold">{data.owner}</p>
-                    <p className="font-light">{data.ownerInfo}</p>
-                    <img className="mt-4" src={separator01a} />
-                </div>
-            </Reveal>
-
-            <div className="flex h-1/3 flex-col items-center justify-center bg-red-400">
-                <Reveal keyframes={fadeIn} delay={300}>
-                    <p className="text-white text-center text-sm">{translation(data.language).greetings1}"{data.owner}"{translation(data.language).greetings2}{data.expiration}</p>
-                </Reveal>
-                <Reveal keyframes={fadeIn} delay={600}>
-                    <p className="text-white text-center text-sm my-5">{translation(data.language).greetings3}</p>
-                </Reveal>
-                <Reveal keyframes={fadeIn} delay={900}>
-                    <Button
-                        text={isDownloading ? translation(data.language).downloadingText : translation(data.language).downloadText}
-                        active={isDownloading ? false : true}
-                        Icon={HiDownload}
-                        onClick={handleDownload}
-                        loading={isDownloading}
-                    />
-                </Reveal>
-            </div> */}
         </div>
     )
 }

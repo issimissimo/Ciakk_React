@@ -1,0 +1,18 @@
+:root {
+    --percentage: 0%;
+    --alpha: 0;
+  }
+
+  
+  .flowers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    background-image: url("./images/flowers.jpg");
+    background-size: cover;
+    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, var(--alpha)) var(--percentage), rgba(0,0,0,1) 100%);;
+    mask-image: radial-gradient(circle, rgba(0, 0, 0, var(--alpha)) var(--percentage), rgba(0,0,0,1) 100%);
+}
