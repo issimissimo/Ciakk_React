@@ -67,10 +67,10 @@ const App = () => {
 
   /// Parameters injected by the URL
   const parameters = useRef({
-    userId: "fwQvvT92JjaN7B0sBGSNWyVY8oy1",
-    fileUiid: "9da4bfb1-80f1-44d0-8063-30302e37aa54"
-    // userId: "",
-    // fileUiid: ""
+    // userId: "fwQvvT92JjaN7B0sBGSNWyVY8oy1",
+    // fileUiid: "9da4bfb1-80f1-44d0-8063-30302e37aa54"
+    userId: "",
+    fileUiid: ""
   });
 
   /// Error message
@@ -105,24 +105,24 @@ const App = () => {
     iOS.current = checkIOS();
 
 
-    // ///
-    // /// Get userId & fileUiid from url parameters
-    // ///
-    // const queryString = window.location.search;
-    // const urlParams = new URLSearchParams(queryString);
-    // const userId = urlParams.get('id');
-    // const fileUiid = urlParams.get('uiid');
+    ///
+    /// Get userId & fileUiid from url parameters
+    ///
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('id');
+    const fileUiid = urlParams.get('uiid');
 
-    // if (!userId || !fileUiid) {
-    //   errorMsg.current.message = <>
-    //     <h1 className="font-semibold text-center">Parameters not specified</h1>
-    //   </>;
-    //   setAppState(AppStateEnum.ERROR);
-    //   return;
-    // }
+    if (!userId || !fileUiid) {
+      errorMsg.current.message = <>
+        <h1 className="font-semibold text-center">Parameters not specified</h1>
+      </>;
+      setAppState(AppStateEnum.ERROR);
+      return;
+    }
 
-    // parameters.current.userId = userId;
-    // parameters.current.fileUiid = fileUiid;
+    parameters.current.userId = userId;
+    parameters.current.fileUiid = fileUiid;
 
 
     /// Login
