@@ -29,7 +29,7 @@ const Greetings = ({ data }) => {
     const handleDownload = () => {
         setTimeout(() => {
             setIsDownloading(true);
-            downloadFileFromUrl(data.downloadUrl, "myVideo.mp4", () => {
+            downloadFileFromUrl(data.videoDownloadUrl, "myVideo.mp4", () => {
                 setIsDownloading(false);
             });
         }, 100)
